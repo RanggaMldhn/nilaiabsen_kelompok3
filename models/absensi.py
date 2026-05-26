@@ -1,59 +1,40 @@
 from exceptions.custom_exceptions import AbsensiDuplikatError
 
 class CatatanAbsensi:
-    """Class untuk menyimpan satu baris catatan kehadiran mahasiswa."""
+    def __init__(self, pertemuan_ke: int, status: str):
+        self.pertemuan_ke = pertemuan_ke
+        self.status = status
 
-    def __init__(self, pertemuan_ke: int, status: str) -> None:
-        """
-        Simpan pertemuan_ke dan status.
-        
-        :param pertemuan_ke: Nomor pertemuan (int)
-        :param status: Status kehadiran ('Hadir', 'Izin', atau 'Alpa')
-        """
-        self.pertemuan_ke: int = pertemuan_ke
-        self.status: str = status
-
-    def __str__(self) -> str:
-        """Tampilkan pertemuan ke-N: status."""
+    def __str__(self):
         return f"Pertemuan ke-{self.pertemuan_ke}: {self.status}"
 
 
 class Absensi:
-    """Class untuk mengelola kumpulan catatan absensi satu mahasiswa."""
-
-    def __init__(self) -> None:
-        """Inisialisasi _catatan = [] sebagai list penampung CatatanAbsensi."""
+    def __init__(self):
         self._catatan: list[CatatanAbsensi] = []
 
-    def catat(self, pertemuan_ke: int, status: str) -> None:
-        """
-        Mencatat absensi pertemuan baru.
-        Raise AbsensiDuplikatError jika pertemuan sudah ada. 
-        Tambahkan CatatanAbsensi baru jika belum ada.
-        """
-        # Validasi apakah nomor pertemuan sudah pernah dicatat sebelumnya
-        for catatan in self._catatan:
-            if catatan.pertemuan_ke == pertemuan_ke:
-                raise AbsensiDuplikatError(
-                    f"Absensi untuk pertemuan ke-{pertemuan_ke} sudah dicatat."
-                )
+    def catat(self, pertemuan_ke, status):
+        # cek dulu apakah pertemuan udah ada di list
+        for i in self._catatan:
+            if i.pertemuan_ke == pertemuan_ke:
+                raise AbsensiDuplikatError("Pertemuan sudah ada")
         
-        # Tambahkan objek CatatanAbsensi baru ke dalam list _catatan
-        catatan_baru = CatatanAbsensi(pertemuan_ke, status)
-        self._catatan.append(catatan_baru)
+        # kalau belum ada, bikin objek baru terus masukin list
+        baru = CatatanAbsensi(pertemuan_ke, status)
+        self._catatan.append(baru)
 
-    def persentase_hadir(self) -> float:
-        """
-        Return (jumlah Hadir / total catatan) * 100.
-        Menghindari error pembagian dengan nol jika catatan masih kosong.
-        """
-        if not self._catatan:
+    def persentase_hadir(self):
+        # biar gak error dibagi 0 kalau list masih kosong
+        if len(self._catatan) == 0:
             return 0.0
-            
-        jumlah_hadir = sum(1 for catatan in self._catatan if catatan.status == "Hadir")
-        return (jumlah_hadir / len(self._catatan)) * 100.0
+        
+        hadir = 0
+        for i in self._catatan:
+            if i.status == 'Hadir':
+                hadir += 1
+                
+        return (hadir / len(self._catatan)) * 100
 
-    def tampilkan(self) -> None:
-        """Cetak semua catatan absensi yang ada di dalam list."""
-        for catatan in self._catatan:
-            print(catatan)
+    def tampilkan(self):
+        for i in self._catatan:
+            print(i)
