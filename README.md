@@ -3,9 +3,9 @@
 Ini adalah project program CLI berbasis Python (dengan konsep OOP) yang kita buat untuk mengelola data mahasiswa, mulai dari input nilai sampai pencatatan absen. 
 
 ## 👥 Anggota Kelompok
-* **Moh. Rozan Istazada Firdausy** - 25083000060 (Tugas: )
-* **Rangga Maulidhani** - 25083000064 (Tugas: )
-* **Arbi Maulana** - 25083000070 (Tugas: )
+* **Moh. Rozan Istazada Firdausy** - 25083000060 (Tugas: Menambahkan file dan branch Absensi dan Memperbaiki Error error yang terjadi)
+* **Rangga Maulidhani** - 25083000064 (Tugas: Menambahkan file file pertama serta branch dikarenakan ketua dan juga memperbaiki error error)
+* **Arbi Maulana** - 25083000070 (Tugas: Menambahkan file akademik)
 
 ---
 
