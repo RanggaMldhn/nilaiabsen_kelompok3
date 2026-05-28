@@ -1,20 +1,6 @@
-Santai, bagian tugasnya sudah saya kosongkan sesuai permintaanmu.
+# Sistem Nilai dan Absensi Mahasiswa (Project UTS)
 
-Untuk menjawab kebingunganmu soal *"gimana cara test, fitur, class diagram, keputusan desain"*, itu sebenarnya **bukan sesuatu yang harus kamu tes satu-satu sekarang**, melainkan sekadar **judul bagian (bab) di dalam file `README.md**`-mu untuk menjelaskan proyek ini ke orang lain (atau dosen).
-
-* **Cara test:** Isinya cuma perintah terminal untuk menjalankan *unit testing* yang ada di folder `tests/`.
-* **Fitur:** Daftar apa saja yang bisa dilakukan programmu (nambah mahasiswa, hitung nilai, dll).
-* **Class Diagram:** Penjelasan struktur *class* OOP-mu secara singkat.
-* **Keputusan Desain:** Penjelasan *kenapa* kode proyekmu dibuat dengan struktur seperti itu (misal: kenapa pakai *inheritance* atau folder dipisah-pisah).
-
-Berikut adalah draf lengkap `README.md` yang sudah disesuaikan dengan nama proyek dan kelompokmu. Tinggal *copy-paste* saja!
-
----
-
-```markdown
-# Sistem Nilai dan Absensi Mahasiswa
-
-Aplikasi CLI berbasis OOP Python untuk mengelola data mahasiswa, nilai, dan absensi secara otomatis.
+Ini adalah project program CLI berbasis Python (dengan konsep OOP) yang kita buat untuk mengelola data mahasiswa, mulai dari input nilai sampai pencatatan absen. 
 
 ## 👥 Anggota Kelompok
 * **Moh. Rozan Istazada Firdausy** - 25083000060 (Tugas: )
@@ -24,7 +10,8 @@ Aplikasi CLI berbasis OOP Python untuk mengelola data mahasiswa, nilai, dan abse
 ---
 
 ## 🚀 Cara Menjalankan Program
-Buka terminal di folder proyek ini, lalu jalankan perintah berikut:
+Untuk mencoba programnya, buka terminal/command prompt di dalam folder project ini, terus jalankan:
+
 ```bash
 python main.py
 
@@ -32,9 +19,9 @@ python main.py
 
 ---
 
-## 🧪 Cara Menjalankan Test (Unit Testing)
+## 🧪 Cara Menjalankan Unit Test
 
-Proyek ini dilengkapi dengan *testing* otomatis untuk memastikan tidak ada *bug* di dalam kode. Untuk menjalankannya, ketik perintah ini di terminal:
+Kita juga nyiapin *unit testing* buat mastiin fitur-fiturnya berjalan normal dan bebas *bug*. Cara test-nya tinggal ketik ini di terminal:
 
 ```bash
 python -m unittest tests/test_akademik.py
@@ -45,35 +32,39 @@ python -m unittest tests/test_akademik.py
 
 ## ✨ Fitur Utama
 
-* **Manajemen Data:** Menambah dan mengelola data mahasiswa.
-* **Kalkulasi Nilai:** Input nilai secara terpisah (Tugas 30%, UTS 35%, UAS 35%) dan menghitung nilai akhir secara otomatis.
-* **Sistem Absensi:** Mencatat kehadiran per pertemuan dan menghitung persentase kehadiran mahasiswa.
-* **Rekap Akademik:** Menampilkan ringkasan data mahasiswa beserta nilai akhir dan status kehadirannya.
-* **Validasi Keamanan:** Menggunakan *error handling* untuk mencegah NIM duplikat, absensi ganda, atau input nilai di luar rentang 0-100.
+* **Kelola Mahasiswa:** Bisa nambahin dan nyimpen data mahasiswa.
+* **Hitung Nilai Otomatis:** Tinggal masukin nilai Tugas (30%), UTS (35%), dan UAS (35%), nanti program yang hitung nilai akhirnya.
+* **Sistem Absensi:** Bisa nyatet kehadiran per pertemuan dan nampilin persentase kehadiran.
+* **Lihat Rekap:** Nampilin ringkasan data mahasiswa lengkap sama nilai akhir dan status absennya.
+* **Aman dari Error:** Kita udah tambahin validasi, jadi program nggak akan *crash* kalau user masukin NIM yang sama (duplikat), absen dua kali, atau masukin nilai lebih dari 100.
 
 ---
 
 ## 🏗️ Struktur Class (Class Diagram)
 
-Program ini dibangun dengan struktur *class* berikut:
+Konsep OOP di program ini dibagi jadi beberapa *class*:
 
-* **Pengguna**: *Base class* yang menyimpan identitas (nama, id, email).
-* **Mahasiswa**: Turunan dari Pengguna yang menyimpan nilai dan absensi.
-* **Dosen**: Turunan dari Pengguna yang memiliki mata kuliah.
-
-
-* **KomponenNilai**: *Abstract class* untuk standarisasi bobot nilai.
-* Diturunkan menjadi **NilaiTugas**, **NilaiUTS**, dan **NilaiUAS**.
+* **Pengguna**: Ini *Base class*-nya (nyimpen nama, id, email).
+* **Mahasiswa**: Turunan dari `Pengguna` (ketambahan fungsi simpan nilai & absensi).
+* **Dosen**: Turunan dari `Pengguna` (punya atribut mata kuliah).
 
 
-* **Absensi & CatatanAbsensi**: Mengelola status kehadiran per pertemuan.
-* **SistemAkademik**: *Controller* utama yang menghubungkan dan menjalankan semua fitur di atas.
+* **KomponenNilai**: Ini *Abstract class* buat nentuin standar bobot nilai.
+* Turunannya ada **NilaiTugas**, **NilaiUTS**, dan **NilaiUAS**.
+
+
+* **Absensi & CatatanAbsensi**: Class khusus buat ngurusin data kehadiran tiap pertemuan.
+* **SistemAkademik**: Bertindak sebagai *Controller* yang nyambungin semua class di atas biar aplikasinya jalan.
 
 ---
 
-## 💡 Keputusan Desain (Design Decisions)
+## 💡 Kenapa Desain Kodenya Begini? (Design Decisions)
 
-1. **Pemisahan Folder (Modular):** Kode dipisah ke folder `models`, `services`, dan `exceptions` agar rapi, mudah dibaca, dan gampang dicari jika ada *bug*.
-2. **Inheritance (Pewarisan):** `Mahasiswa` dan `Dosen` diturunkan dari `Pengguna` supaya kita tidak perlu menulis ulang variabel yang sama seperti nama dan ID.
-3. **Polymorphism:** Penggunaan *abstract class* pada `KomponenNilai` membuat perhitungan nilai akhir menjadi jauh lebih dinamis dan rapi.
-4. **Custom Exceptions:** Menggunakan *class error* buatan sendiri (seperti `NIMDuplikatError`) agar pesan *error* saat program gagal lebih mudah dipahami oleh pengguna.
+1. **Foldernya Dipisah (Modular):** Kodenya sengaja kita pecah ke folder `models`, `services`, dan `exceptions`. Tujuannya biar rapi aja, jadi gampang kalau mau nyari file pas lagi *debugging*.
+2. **Pakai Inheritance:** `Mahasiswa` sama `Dosen` diturunkan dari class `Pengguna`. Biar kita nggak capek nulis ulang variabel dasar kayak nama dan ID di masing-masing class.
+3. **Pakai Polymorphism:** Kita bikin *abstract class* di `KomponenNilai` biar cara hitung nilai akhirnya lebih rapi dan gampang kalau nanti mau nambah komponen nilai baru.
+4. **Bikin Custom Exceptions:** Daripada pakai *error* bawaan Python yang bahasanya susah dimengerti, kita bikin class *error* sendiri (contohnya `NIMDuplikatError`). Jadi kalau user salah input, pesan *error*-nya lebih jelas.
+
+```
+
+```
