@@ -5,7 +5,7 @@ class CatatanAbsensi:
         self.pertemuan_ke = pertemuan_ke
         self.status = status
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Pertemuan ke-{self.pertemuan_ke}: {self.status}"
 
 
@@ -13,27 +13,21 @@ class Absensi:
     def __init__(self):
         self._catatan: list[CatatanAbsensi] = []
 
-    # Disamakan fungsinya dengan yang dipanggil di akademik.py
-    def catat_kehadiran(self, pertemuan_ke, status):
-        for i in self._catatan:
-            if i.pertemuan_ke == pertemuan_ke:
-                raise AbsensiDuplikatError(f"Absensi pertemuan ke-{pertemuan_ke} sudah dicatat!")
+    def catat_kehadiran(self, pertemuan_ke: int, status: str) -> None:
+        # Optimasi pencarian menggunakan generator expression (Lebih cepat untuk data besar)
+        if any(c.pertemuan_ke == pertemuan_ke for c in self._catatan):
+            raise AbsensiDuplikatError(f"Absensi pertemuan ke-{pertemuan_ke} sudah dicatat!")
         
-        baru = CatatanAbsensi(pertemuan_ke, status)
-        self._catatan.append(baru)
+        self._catatan.append(CatatanAbsensi(pertemuan_ke, status))
 
-    # Disamakan fungsinya dengan yang dipanggil di akademik.py
     def hitung_persentase(self) -> float:
-        if len(self._catatan) == 0:
+        if not self._catatan:
             return 0.0
         
-        hadir = 0
-        for i in self._catatan:
-            if i.status.lower() == 'hadir':
-                hadir += 1
-                
-        return (hadir / len(self._catatan)) * 100
+        # Menggunakan filter generator hemat memori
+        total_hadir = sum(1 for c in self._catatan if c.status.strip().lower() == 'hadir')
+        return (total_hadir / len(self._catatan)) * 100
 
-    def tampilkan(self):
-        for i in self._catatan:
-            print(i)
+    def tampilkan(self) -> None:
+        for c in self._catatan:
+            print(c)

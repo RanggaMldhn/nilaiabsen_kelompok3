@@ -1,30 +1,25 @@
 from exceptions.custom_exceptions import (
     NIMDuplikatError,
-    MahasiswaTidakDitemukanError,
-    AbsensiDuplikatError
+    MahasiswaTidakDitemukanError
 )
 from models.pengguna import Mahasiswa, Dosen
 from models.nilai import NilaiTugas, NilaiUTS, NilaiUAS
-
 
 class SistemAkademik:
     def __init__(self):
         self.daftar_mahasiswa: list[Mahasiswa] = []
         self.daftar_dosen: list[Dosen] = []
 
-
     def tambah_mahasiswa(self, mahasiswa: Mahasiswa) -> str:
-        for mhs in self.daftar_mahasiswa:
-            if mhs.id_pengguna == mahasiswa.id_pengguna:
-                raise NIMDuplikatError(f"NIM {mahasiswa.id_pengguna} sudah terdaftar!")
+        if any(mhs.id_pengguna == mahasiswa.id_pengguna for mhs in self.daftar_mahasiswa):
+            raise NIMDuplikatError(f"NIM {mahasiswa.id_pengguna} sudah terdaftar!")
            
         self.daftar_mahasiswa.append(mahasiswa)
         return f"Mahasiswa {mahasiswa.nama} berhasil ditambahkan."
    
     def tambah_dosen(self, dosen: Dosen) -> str:
-        for d in self.daftar_dosen:
-            if d.id_pengguna == dosen.id_pengguna:
-                raise NIMDuplikatError(f"ID Dosen {dosen.id_pengguna} sudah terdaftar!")
+        if any(d.id_pengguna == dosen.id_pengguna for d in self.daftar_dosen):
+            raise NIMDuplikatError(f"ID Dosen {dosen.id_pengguna} sudah terdaftar!")
            
         self.daftar_dosen.append(dosen)
         return f"Dosen {dosen.nama} berhasil ditambahkan."
@@ -44,7 +39,6 @@ class SistemAkademik:
         for mhs in self.daftar_mahasiswa:
             print(mhs.info())
 
-
     def catat_absensi(self, nim: str, pertemuan: int, status: str) -> str:
         mhs = self.cari_mahasiswa(nim)
         mhs.absensi.catat_kehadiran(pertemuan, status)
@@ -52,14 +46,15 @@ class SistemAkademik:
    
     def input_nilai(self, nim: str, jenis_komponen: str, nilai_angka: float) -> str:
         mhs = self.cari_mahasiswa(nim)
-        if jenis_komponen.lower() == "tugas":
-            komponen = NilaiTugas(nilai_angka)
-        elif jenis_komponen.lower() == "uts":
-            komponen = NilaiUTS(nilai_angka)
-        elif jenis_komponen.lower() == "uas":
-            komponen = NilaiUAS(nilai_angka)
-        else:
-            return f"Jenis komponen {jenis_komponen} tidak valid!"
+        match jenis_komponen.lower(): # Menggunakan structural pattern matching Python 3.10+
+            case "tugas":
+                komponen = NilaiTugas(nilai_angka)
+            case "uts":
+                komponen = NilaiUTS(nilai_angka)
+            case "uas":
+                komponen = NilaiUAS(nilai_angka)
+            case _:
+                return f"Jenis komponen {jenis_komponen} tidak valid!"
        
         mhs.tambah_nilai(komponen)
         return f"Nilai {jenis_komponen} ({nilai_angka}) berhasil ditambahkan untuk {mhs.nama}."
@@ -73,7 +68,6 @@ class SistemAkademik:
         for mhs in self.daftar_mahasiswa:
             print(f"{mhs.nama} ({mhs.id_pengguna}) - Nilai Akhir: {mhs.nilai_akhir():.2f}")
 
-
     def laporan_kehadiran_kurang(self) -> None:
         print("\n--- LAPORAN KEHADIRAN < 75% ---")
         ditemukan = False
@@ -83,10 +77,8 @@ class SistemAkademik:
                 print(f"{mhs.nama} ({mhs.id_pengguna}) - Kehadiran: {persentase:.2f}%")
                 ditemukan = True
 
-
         if not ditemukan:
             print("Tidak ada mahasiswa dengan kehadiran di bawah 75%. Semua aman!")
-
 
     def peringkat_kelas(self) -> None:
         print("\n--- PERINGKAT KELAS ---")
@@ -94,12 +86,12 @@ class SistemAkademik:
             print("Belum ada data mahasiswa.")
             return
        
+        # Diurutkan berdasarkan method float nilai_akhir()
         mahasiswa_sorted = sorted(
             self.daftar_mahasiswa,
             key=lambda m: m.nilai_akhir(),
             reverse=True
         )
 
-
         for peringkat, mhs in enumerate(mahasiswa_sorted, start=1):
-            print(f"Rank {peringkat}: {mhs.nama} - Nilai Akhir: {mhs.nilai_akhir():.2f}")
+            print(f"Rank { peringkat}: {mhs.nama} - Nilai Akhir: {mhs.nilai_akhir():.2f}")

@@ -4,7 +4,7 @@ from exceptions.custom_exceptions import NilaiTidakValidError
 class KomponenNilai(ABC):
     def __init__(self, nilai: float):
         self._nilai = 0.0
-        self.nilai = nilai
+        self.nilai = nilai  # Memicu setter validasi
 
     @property
     def nilai(self) -> float:
@@ -18,7 +18,6 @@ class KomponenNilai(ABC):
             raise NilaiTidakValidError("Nilai harus berupa angka numerik!")
         
         if not (0 <= numeric_value <= 100):
-            # Ditambahkan f di depan string biar format angkanya kebaca
             raise NilaiTidakValidError(f"Nilai tidak valid ({numeric_value}). Harus diantara 0 - 100!")
         self._nilai = numeric_value
 
@@ -32,9 +31,6 @@ class KomponenNilai(ABC):
 
 
 class NilaiTugas(KomponenNilai):
-    def __init__(self, nilai: float):
-        super().__init__(nilai)
-
     def bobot(self) -> float:
         return 0.30
     
@@ -43,9 +39,6 @@ class NilaiTugas(KomponenNilai):
 
 
 class NilaiUTS(KomponenNilai):
-    def __init__(self, nilai: float):
-        super().__init__(nilai)
-
     def bobot(self) -> float:
         return 0.35
     
@@ -54,9 +47,6 @@ class NilaiUTS(KomponenNilai):
 
 
 class NilaiUAS(KomponenNilai):
-    def __init__(self, nilai: float):
-        super().__init__(nilai)
-
     def bobot(self) -> float:
         return 0.35
 
