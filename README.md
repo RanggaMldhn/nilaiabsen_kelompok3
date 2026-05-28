@@ -10,7 +10,8 @@ Ini adalah project program CLI berbasis Python (dengan konsep OOP) yang kita bua
 ---
 
 ## 🚀 Cara Menjalankan Program
-Untuk mencoba programnya, buka terminal/command prompt di dalam folder project ini, terus jalankan:
+Untuk mencoba programnya, buka terminal/command prompt di dalam folder project ini atau bisa di atas kanan langsung play dan juga bisa ditekan f5 shortcut agar menjalankan program tersebut
+jika buka terminalnya bisa menulis ini dan menjalankannya:
 
 ```bash
 python main.py
