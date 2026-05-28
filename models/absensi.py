@@ -13,24 +13,23 @@ class Absensi:
     def __init__(self):
         self._catatan: list[CatatanAbsensi] = []
 
-    def catat(self, pertemuan_ke, status):
-        # cek dulu apakah pertemuan udah ada di list
+    # Disamakan fungsinya dengan yang dipanggil di akademik.py
+    def catat_kehadiran(self, pertemuan_ke, status):
         for i in self._catatan:
             if i.pertemuan_ke == pertemuan_ke:
-                raise AbsensiDuplikatError("Pertemuan sudah ada")
+                raise AbsensiDuplikatError(f"Absensi pertemuan ke-{pertemuan_ke} sudah dicatat!")
         
-        # kalau belum ada, bikin objek baru terus masukin list
         baru = CatatanAbsensi(pertemuan_ke, status)
         self._catatan.append(baru)
 
-    def persentase_hadir(self):
-        # biar gak error dibagi 0 kalau list masih kosong
+    # Disamakan fungsinya dengan yang dipanggil di akademik.py
+    def hitung_persentase(self) -> float:
         if len(self._catatan) == 0:
             return 0.0
         
         hadir = 0
         for i in self._catatan:
-            if i.status == 'Hadir':
+            if i.status.lower() == 'hadir':
                 hadir += 1
                 
         return (hadir / len(self._catatan)) * 100
